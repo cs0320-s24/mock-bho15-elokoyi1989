@@ -1,11 +1,14 @@
 import '../styles/main.css';
 import { Dispatch, SetStateAction, useState} from 'react';
 import { ControlledInput } from './ControlledInput';
+import { getOutputForCommand } from './mockData'
 
 interface REPLInputProps{
   // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
   history: string[];
   setHistory: Dispatch<SetStateAction<string[]>>;
+  verbose: boolean;
+  setVerbose: Dispatch<SetStateAction<boolean>>;
 }
 // You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
 // REPLInput(history: string[], setHistory: Dispatch<SetStateAction<string[]>>)
@@ -17,8 +20,19 @@ export function REPLInput(props : REPLInputProps) {
     const [count, setCount] = useState<number>(0);
     // TODO WITH TA: build a handleSubmit function called in button onClick
     function handleSubmit(commandString: string) {
+      if (commandString === "mode") {
+        props.setVerbose(!props.verbose);
+      }
       setCount(count + 1);
-      props.setHistory([...props.history, commandString]);
+
+      // Construct the output based on verbose mode
+      const output = props.verbose
+      ? `Command: ${commandString}\nOutput: ${getOutputForCommand(commandString, props.verbose)}`
+      : getOutputForCommand(commandString, props.verbose);
+
+      // Update history state
+      props.setHistory((prevHistory) => [...prevHistory, output]);
+      
       setCommandString("");
     }
     // TODO: Once it increments, try to make it push commands... Note that you can use the `...` spread syntax to copy what was there before
