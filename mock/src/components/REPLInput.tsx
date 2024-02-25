@@ -2,13 +2,14 @@ import '../styles/main.css';
 import { Dispatch, SetStateAction, useState} from 'react';
 import { ControlledInput } from './ControlledInput';
 import { getOutputForCommand } from './mockData'
+import { REPLFunction } from './REPLFunctions';
 
 interface REPLInputProps{
-  // TODO: Fill this with desired props... Maybe something to keep track of the submitted commands
   history: string[];
   setHistory: Dispatch<SetStateAction<string[]>>;
   verbose: boolean;
   setVerbose: Dispatch<SetStateAction<boolean>>;
+  commandRegistry: Record<string, REPLFunction>;
 }
 // You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
 // REPLInput(history: string[], setHistory: Dispatch<SetStateAction<string[]>>)
@@ -16,14 +17,21 @@ export function REPLInput(props : REPLInputProps) {
     // Remember: let React manage state in your webapp. 
     // Manages the contents of the input box
     const [commandString, setCommandString] = useState<string>('');
-    // TODO WITH TA : add a count state
     const [count, setCount] = useState<number>(0);
-    // TODO WITH TA: build a handleSubmit function called in button onClick
+
     function handleSubmit(commandString: string) {
-      if (commandString === "mode") {
-        props.setVerbose(!props.verbose);
-      }
+      // Split up input string into command and arguments
+      var commandWithArgs = commandString.split(" ");
+      const [commandKeyword, ...args] = commandWithArgs;
+      var output = ""
       setCount(count + 1);
+      const command = props.commandRegistry[commandKeyword];
+      if (command === undefined) {
+        output = "Command was not found.";
+      } else {
+        // output = command(args);
+      }
+      
       if (props.verbose === false) {
         // Since props.setVerbose is called after the handle, we want to pass in the opposite
         props.setHistory([...props.history, getOutputForCommand(commandString, !props.verbose)]);

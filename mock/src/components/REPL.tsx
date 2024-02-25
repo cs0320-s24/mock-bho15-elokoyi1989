@@ -2,6 +2,7 @@ import { useState } from 'react';
 import '../styles/main.css';
 import { REPLHistory } from './REPLHistory';
 import { REPLInput } from './REPLInput';
+import { REPLFunction } from './REPLFunctions';
 
 /* 
   You'll want to expand this component (and others) for the sprints! Remember 
@@ -13,9 +14,9 @@ import { REPLInput } from './REPLInput';
 */
 
 export default function REPL() {
-  // TODO: Add some kind of shared state that holds all the commands submitted.
   const [history, setHistory] = useState<string[]>([]);
   const [verbose, setVerbose] = useState<boolean>(false);
+  const [commandRegistry, setCommandRegistry] = useState<Record<string, REPLFunction>>({});
 
   return (
     <div className="repl">  
@@ -32,6 +33,7 @@ export default function REPL() {
         setHistory={setHistory}
         verbose={verbose} 
         setVerbose={setVerbose}
+        commandRegistry={commandRegistry}
       />
     </div>
   );
