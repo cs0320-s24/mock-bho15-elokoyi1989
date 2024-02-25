@@ -2,7 +2,8 @@ import { useState } from 'react';
 import '../styles/main.css';
 import { REPLHistory } from './REPLHistory';
 import { REPLInput } from './REPLInput';
-import { REPLFunction } from './REPLFunctions';
+import { REPLFunction, createCommandRegistry } from './REPLFunctionUtility';
+import { REPLFunctions } from './REPLFunctions';
 
 /* 
   You'll want to expand this component (and others) for the sprints! Remember 
@@ -17,6 +18,16 @@ export default function REPL() {
   const [history, setHistory] = useState<string[]>([]);
   const [verbose, setVerbose] = useState<boolean>(false);
   const [commandRegistry, setCommandRegistry] = useState<Record<string, REPLFunction>>({});
+
+  createCommandRegistry({ commandRegistry, setCommandRegistry });
+  REPLFunctions({
+    history,
+    setHistory,
+    verbose,
+    setVerbose,
+    commandRegistry,
+    setCommandRegistry
+  });
 
   return (
     <div className="repl">  

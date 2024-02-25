@@ -1,16 +1,25 @@
-/**
- * A command-processor function for our REPL. The function returns a string, which is the value to print to history when 
- * the command is done executing.
- * 
- * The arguments passed in the input (which need not be named "args") should 
- * *NOT* contain the command-name prefix.
- */
-export interface REPLFunction {    
-    (args: Array<string>): String|String[][]
+import '../styles/main.css';
+import { Dispatch, SetStateAction, useEffect} from 'react';
+import { REPLFunction, addCommand } from './REPLFunctionUtility';
+
+interface REPLFunctionsProps {
+  history: string[];
+  setHistory: Dispatch<SetStateAction<string[]>>;
+  verbose: boolean;
+  setVerbose: Dispatch<SetStateAction<boolean>>;
+  commandRegistry: Record<string, REPLFunction>;
+  setCommandRegistry: Dispatch<SetStateAction<Record<string, REPLFunction>>>;
 }
 
-const commandRegistry: Record<string, REPLFunction> = {};
-
-export function addFunction(commandName: string, command: REPLFunction) {
-    commandRegistry[commandName] = command;
+export function REPLFunctions(props: REPLFunctionsProps) {
+  useEffect(() => {
+    const modeCommand: REPLFunction = () => {
+      props.setVerbose(!props.verbose);
+      console.log(props.verbose);
+      return "Verbose is now " + !props.verbose;
+    };
+    // Create more commands here!
+    props.setCommandRegistry(addCommand("mode", modeCommand, props.commandRegistry))
+  }, [props.verbose]);
+  return null;
 }

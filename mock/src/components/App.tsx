@@ -11,11 +11,10 @@ function App() {
 
   return (
     <div className="App">
+      <h1>Mock</h1>
       <p className="App-header">
-        <h1>Mock</h1>
         <LoginButton isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
       </p>
-
       { isLoggedIn && <REPL /> }
     </div>
   );

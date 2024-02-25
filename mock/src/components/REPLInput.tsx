@@ -1,10 +1,9 @@
 import '../styles/main.css';
 import { Dispatch, SetStateAction, useState} from 'react';
 import { ControlledInput } from './ControlledInput';
-import { getOutputForCommand } from './mockData'
-import { REPLFunction } from './REPLFunctions';
+import { REPLFunction } from './REPLFunctionUtility';
 
-interface REPLInputProps{
+interface REPLInputProps {
   history: string[];
   setHistory: Dispatch<SetStateAction<string[]>>;
   verbose: boolean;
@@ -20,25 +19,30 @@ export function REPLInput(props : REPLInputProps) {
     const [count, setCount] = useState<number>(0);
 
     function handleSubmit(commandString: string) {
+      // Increment the count
+      setCount(count + 1);
+
       // Split up input string into command and arguments
       var commandWithArgs = commandString.split(" ");
       const [commandKeyword, ...args] = commandWithArgs;
-      var output = ""
-      setCount(count + 1);
+
+      // Store the output of the command
+      var output: string;
       const command = props.commandRegistry[commandKeyword];
+      console.log(command);
       if (command === undefined) {
         output = "Command was not found.";
       } else {
-        // output = command(args);
+        output = command(args);
       }
       
       if (props.verbose === false) {
         // Since props.setVerbose is called after the handle, we want to pass in the opposite
-        props.setHistory([...props.history, getOutputForCommand(commandString, !props.verbose)]);
+        props.setHistory([...props.history, output]);
       } else {
         props.setHistory([...props.history, 
           "Command: " + commandString + "\n" + "Output: " + 
-          getOutputForCommand(commandString, props.verbose)]);
+          output]);
       }
       
       setCommandString("");
