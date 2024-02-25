@@ -24,14 +24,14 @@ export function REPLInput(props : REPLInputProps) {
         props.setVerbose(!props.verbose);
       }
       setCount(count + 1);
-
-      // Construct the output based on verbose mode
-      const output = props.verbose
-      ? `Command: ${commandString}\nOutput: ${getOutputForCommand(commandString, props.verbose)}`
-      : getOutputForCommand(commandString, props.verbose);
-
-      // Update history state
-      props.setHistory((prevHistory) => [...prevHistory, output]);
+      if (props.verbose === false) {
+        // Since props.setVerbose is called after the handle, we want to pass in the opposite
+        props.setHistory([...props.history, getOutputForCommand(commandString, !props.verbose)]);
+      } else {
+        props.setHistory([...props.history, 
+          "Command: " + commandString + "\n" + "Output: " + 
+          getOutputForCommand(commandString, props.verbose)]);
+      }
       
       setCommandString("");
     }
