@@ -1,7 +1,6 @@
 import "../styles/main.css";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { REPLFunction, addCommand } from "./REPLFunctionUtility";
-import { CSV } from "./CSV";
 
 interface REPLFunctionsProps {
   history: string[];
@@ -23,10 +22,14 @@ export function REPLFunctions(props: REPLFunctionsProps) {
       return "Verbose is now " + !props.verbose;
     };
 
-    const loadCommand: REPLFunction = () => {
-      props.setFilepath(props.filepath);
-      console.log(props.filepath);
-      return "This csv file:" + csvFilePath + "is now loaded.";
+    const loadCommand: REPLFunction = (filepath: string[] | undefined) => {
+      if (filepath === undefined) {
+        return "Filepath was not given as an argument."
+      } else if (filepath.length > 1) {
+        return "Only one filepath can be taken in."
+      }
+      props.setFilepath(filepath[0]);
+      return "This csv file:" + filepath[0] + "is now loaded.";
     };
 
     // Add more commands here!

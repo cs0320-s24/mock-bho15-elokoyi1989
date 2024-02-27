@@ -46,7 +46,8 @@ export default function REPL() {
         setHistory={setHistory}
         verbose={verbose}
         setVerbose={setVerbose}
-        load={setFilepath}
+        filepath={filepath}
+        setFilepath={setFilepath}
         commandRegistry={commandRegistry}
       />
     </div>

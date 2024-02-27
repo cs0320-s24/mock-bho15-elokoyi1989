@@ -13,7 +13,7 @@ interface REPLFunctionUtilityProps {
 }
 
 export interface REPLFunction {
-  (args?: Array<string>): string;
+  (args?: string[]): string;
 }
 
 export function createCommandRegistry(props: REPLFunctionUtilityProps) {

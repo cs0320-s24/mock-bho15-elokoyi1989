@@ -8,6 +8,8 @@ interface REPLInputProps {
   setHistory: Dispatch<SetStateAction<string[]>>;
   verbose: boolean;
   setVerbose: Dispatch<SetStateAction<boolean>>;
+  filepath: string;
+  setFilepath: Dispatch<SetStateAction<string>>;
   commandRegistry: Record<string, REPLFunction>;
 }
 // You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
