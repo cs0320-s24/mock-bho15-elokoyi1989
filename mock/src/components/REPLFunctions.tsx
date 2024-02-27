@@ -11,6 +11,8 @@ interface REPLFunctionsProps {
   setFilepath: Dispatch<SetStateAction<string>>;
   commandRegistry: Record<string, REPLFunction>;
   setCommandRegistry: Dispatch<SetStateAction<Record<string, REPLFunction>>>;
+  mockData: Record<string, Array<any>>;
+  setMockData: Dispatch<Record<string, Array<any>>>;
 }
 
 export function REPLFunctions(props: REPLFunctionsProps) {
@@ -24,9 +26,12 @@ export function REPLFunctions(props: REPLFunctionsProps) {
 
     const loadCommand: REPLFunction = (filepath: string[] | undefined) => {
       if (filepath === undefined) {
-        return "Filepath was not given as an argument."
+        return "Filepath was not given as an argument.";
       } else if (filepath.length > 1) {
-        return "Only one filepath can be taken in."
+        return "Only one filepath can be taken in.";
+      } else if (!(filepath[0] in props.mockData)) {
+        console.log("blah");
+        return "Filepath does not exist.";
       }
       props.setFilepath(filepath[0]);
       return "This csv file:" + filepath[0] + "is now loaded.";
