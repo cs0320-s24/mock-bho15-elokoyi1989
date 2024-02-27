@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import '../styles/main.css';
-import { REPLHistory } from './REPLHistory';
-import { REPLInput } from './REPLInput';
-import { REPLFunction, createCommandRegistry } from './REPLFunctionUtility';
-import { REPLFunctions } from './REPLFunctions';
+import { useState } from "react";
+import "../styles/main.css";
+import { REPLHistory } from "./REPLHistory";
+import { REPLInput } from "./REPLInput";
+import { REPLFunction, createCommandRegistry } from "./REPLFunctionUtility";
+import { REPLFunctions } from "./REPLFunctions";
 
 /* 
   You'll want to expand this component (and others) for the sprints! Remember 
@@ -17,7 +17,10 @@ import { REPLFunctions } from './REPLFunctions';
 export default function REPL() {
   const [history, setHistory] = useState<string[]>([]);
   const [verbose, setVerbose] = useState<boolean>(false);
-  const [commandRegistry, setCommandRegistry] = useState<Record<string, REPLFunction>>({});
+  const [filepath, setFilepath] = useState<string>("");
+  const [commandRegistry, setCommandRegistry] = useState<
+    Record<string, REPLFunction>
+  >({});
 
   createCommandRegistry({ commandRegistry, setCommandRegistry });
   REPLFunctions({
@@ -25,25 +28,25 @@ export default function REPL() {
     setHistory,
     verbose,
     setVerbose,
+    filepath: filepath,
+    setFilepath: setFilepath,
     commandRegistry,
-    setCommandRegistry
+    setCommandRegistry,
   });
 
   return (
-    <div className="repl">  
+    <div className="repl">
       {/*This is where your REPLHistory might go... You also may choose to add it within your REPLInput 
       component or somewhere else depending on your component organization. What are the pros and cons of each? */}
       {/* TODO: Update your REPLHistory and REPLInput to take in new shared state as props */}
-      <REPLHistory 
-        history={history}
-        verbose={verbose}
-      />
+      <REPLHistory history={history} verbose={verbose} />
       <hr></hr>
-      <REPLInput 
+      <REPLInput
         history={history}
         setHistory={setHistory}
-        verbose={verbose} 
+        verbose={verbose}
         setVerbose={setVerbose}
+        load={setFilepath}
         commandRegistry={commandRegistry}
       />
     </div>
