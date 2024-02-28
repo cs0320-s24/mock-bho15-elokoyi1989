@@ -8,12 +8,11 @@ import { Dispatch, SetStateAction, useEffect } from "react";
  * *NOT* contain the command-name prefix.
  */
 interface REPLFunctionUtilityProps {
-  commandRegistry: Record<string, REPLFunction>;
   setCommandRegistry: Dispatch<SetStateAction<Record<string, REPLFunction>>>;
 }
 
 export interface REPLFunction {
-  (args?: string[]): string;
+  (args?: string[]): string | string[][];
 }
 
 export function createCommandRegistry(props: REPLFunctionUtilityProps) {

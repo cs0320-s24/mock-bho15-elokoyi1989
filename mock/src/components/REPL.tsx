@@ -16,18 +16,16 @@ import { createMockData } from "./REPLMockData";
 */
 
 export default function REPL() {
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState<any[]>([]);
   const [verbose, setVerbose] = useState<boolean>(false);
   const [filepath, setFilepath] = useState<string>("");
   const [commandRegistry, setCommandRegistry] = useState<
     Record<string, REPLFunction>
   >({});
-  const [mockData, setMockData] = useState<
-    Record<string, Array<any>>
-  >({});
+  const [mockData, setMockData] = useState<Record<string, Array<any>>>({});
 
-  createMockData({ mockData, setMockData });
-  createCommandRegistry({ commandRegistry, setCommandRegistry });
+  createMockData({ setMockData });
+  createCommandRegistry({ setCommandRegistry });
   REPLFunctions({
     history,
     setHistory,
@@ -38,7 +36,6 @@ export default function REPL() {
     commandRegistry,
     setCommandRegistry,
     mockData,
-    setMockData
   });
 
   return (

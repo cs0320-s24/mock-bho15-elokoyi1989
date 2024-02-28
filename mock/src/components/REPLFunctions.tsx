@@ -12,7 +12,6 @@ interface REPLFunctionsProps {
   commandRegistry: Record<string, REPLFunction>;
   setCommandRegistry: Dispatch<SetStateAction<Record<string, REPLFunction>>>;
   mockData: Record<string, Array<any>>;
-  setMockData: Dispatch<Record<string, Array<any>>>;
 }
 
 export function REPLFunctions(props: REPLFunctionsProps) {
@@ -20,7 +19,6 @@ export function REPLFunctions(props: REPLFunctionsProps) {
     // Create more commands here!
     const modeCommand: REPLFunction = () => {
       props.setVerbose(!props.verbose);
-      console.log(props.verbose);
       return "Verbose is now " + !props.verbose;
     };
 
@@ -30,11 +28,19 @@ export function REPLFunctions(props: REPLFunctionsProps) {
       } else if (filepath.length > 1) {
         return "Only one filepath can be taken in.";
       } else if (!(filepath[0] in props.mockData)) {
-        console.log("blah");
         return "Filepath does not exist.";
       }
+      console.log(filepath[0]);
       props.setFilepath(filepath[0]);
       return "This csv file:" + filepath[0] + "is now loaded.";
+    };
+
+    const viewCommand: REPLFunction = () => {
+      if (props.filepath === undefined) {
+        return "Data was not loaded before view.";
+      }
+      console.log(props.filepath);
+      return props.mockData[props.filepath];
     };
 
     // Add more commands here!
@@ -44,6 +50,9 @@ export function REPLFunctions(props: REPLFunctionsProps) {
     props.setCommandRegistry(
       addCommand("load_file", loadCommand, props.commandRegistry)
     );
-  }, [props.verbose]);
+    props.setCommandRegistry(
+      addCommand("view", viewCommand, props.commandRegistry)
+    );
+  }, [props.verbose, props.mockData, props.filepath]);
   return null;
 }
