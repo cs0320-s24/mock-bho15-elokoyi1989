@@ -8,9 +8,13 @@ interface REPLMockDataProps {
 export function createMockData(props: REPLMockDataProps) {
   useEffect(() => {
     const mockData: Record<string, Array<any>> = {
-      MockData1: [
-        [1, 2, 3, 4, 5],
-        ["The", "song", "remains", "the", "same."],
+      StudentData: [
+        ["Student", "Major", "Dorm", "Age"],
+        ["Ashley", "Mathematics", "New Pem 3", "21"],
+        ["Brian", "Geology", "Greg A", "20"],
+        ["Colton", "Urban Studies", "Grad Center", "20"],
+        ["Derrick", "Art", "Minden", "22"],
+        ["Emily", "English", "Metcalf", "19"]
       ],
       MockData2: [
         [1, 2, 3],
