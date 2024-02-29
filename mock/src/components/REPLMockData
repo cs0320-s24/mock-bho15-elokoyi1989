@@ -1,0 +1,19 @@
+import React from "react";
+
+export interface MockData {}
+
+const MockDatasets: Record<string, MockData[]> = {
+  MockData1: [
+    [1, 2, 3, 4, 5],
+    ["The", "song", "remains", "the", "same."],
+  ],
+
+  MockData2: [
+    [1, 2, 3],
+    ["The", "song", "remains"],
+  ],
+  MockData3: [
+    [15, 20, 25],
+    ["John", "Abby", "Jamaica"],
+  ],
+};

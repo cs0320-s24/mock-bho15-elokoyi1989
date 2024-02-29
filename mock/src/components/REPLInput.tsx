@@ -2,10 +2,11 @@ import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
 import { REPLFunction } from "./REPLFunctionUtility";
+//import { CSV } from './CSV';
 
 interface REPLInputProps {
   history: string[];
-  setHistory: Dispatch<SetStateAction<any[]>>;
+  setHistory: Dispatch<SetStateAction<string[]>>;
   verbose: boolean;
   setVerbose: Dispatch<SetStateAction<boolean>>;
   filepath: string;
@@ -29,15 +30,18 @@ export function REPLInput(props: REPLInputProps) {
     const [commandKeyword, ...args] = commandWithArgs;
 
     // Store the output of the command
-    var output: string | string[][];
+    var output: string;
     const command = props.commandRegistry[commandKeyword];
+    console.log(command);
     if (command === undefined) {
       output = "Command was not found.";
     } else {
-      output = command(args);
+      if (commandKeyword.toLowerCase() === "search") {
+        output = command(commandWithArgs.slice(1)); // Pass all arguments to the search command
+      } else {
+        output = command(args);
+      }
     }
-
-    console.log(output);
 
     if (props.verbose === false) {
       // Since props.setVerbose is called after the handle, we want to pass in the opposite
@@ -51,12 +55,7 @@ export function REPLInput(props: REPLInputProps) {
 
     setCommandString("");
   }
-  // TODO: Once it increments, try to make it push commands... Note that you can use the `...` spread syntax to copy what was there before
-  // add to it with new commands.
-  /**
-   * We suggest breaking down this component into smaller components, think about the individual pieces
-   * of the REPL and how they connect to each other...
-   */
+
   return (
     <div className="repl-input">
       {/* This is a comment within the JSX. Notice that it's a TypeScript comment wrapped in

@@ -4,7 +4,6 @@ import { REPLHistory } from "./REPLHistory";
 import { REPLInput } from "./REPLInput";
 import { REPLFunction, createCommandRegistry } from "./REPLFunctionUtility";
 import { REPLFunctions } from "./REPLFunctions";
-import { createMockData } from "./REPLMockData";
 
 /* 
   You'll want to expand this component (and others) for the sprints! Remember 
@@ -16,26 +15,27 @@ import { createMockData } from "./REPLMockData";
 */
 
 export default function REPL() {
-  const [history, setHistory] = useState<any[]>([]);
+  const [history, setHistory] = useState<string[]>([]);
   const [verbose, setVerbose] = useState<boolean>(false);
   const [filepath, setFilepath] = useState<string>("");
+  const [MockData, setMockData] = useState<
+    Record<string, string[][]> | undefined
+  >({});
   const [commandRegistry, setCommandRegistry] = useState<
     Record<string, REPLFunction>
   >({});
-  const [mockData, setMockData] = useState<Record<string, Array<any>>>({});
 
-  createMockData({ setMockData });
-  createCommandRegistry({ setCommandRegistry });
+  createCommandRegistry({ commandRegistry, setCommandRegistry });
   REPLFunctions({
     history,
     setHistory,
     verbose,
     setVerbose,
-    filepath: filepath,
-    setFilepath: setFilepath,
+    filepath,
+    setFilepath,
+    MockData,
     commandRegistry,
     setCommandRegistry,
-    mockData,
   });
 
   return (
@@ -43,7 +43,7 @@ export default function REPL() {
       {/*This is where your REPLHistory might go... You also may choose to add it within your REPLInput 
       component or somewhere else depending on your component organization. What are the pros and cons of each? */}
       {/* TODO: Update your REPLHistory and REPLInput to take in new shared state as props */}
-      <REPLHistory history={history} verbose={verbose} />
+      <REPLHistory history={history} verbose={verbose} filepath="filepath" />
       <hr></hr>
       <REPLInput
         history={history}
