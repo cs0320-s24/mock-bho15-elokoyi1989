@@ -1,23 +1,28 @@
 import "../styles/main.css";
+import { REPLOutput } from "./REPLOutput";
 
 interface REPLHistoryProps {
-  // TODO: Fill with some shared state tracking all the pushed commands
-  history: string[];
   verbose: boolean;
-  filepath: string;
+  history: string[];
 }
+
 export function REPLHistory(props: REPLHistoryProps) {
   return (
     <div className="repl-history">
-      {/* This is where command history will go */}
-      {/* TODO: To go through all the pushed commands... try the .map() function! */}
-      {props.history.map((entry, index) => (
-        <div key={index}>
-          {/* Split the entry by '\n' to get an array of lines */}
-          {entry.split("\n").map((line, lineIndex) => (
-            // Render each line as a separate <p> element
-            <p key={lineIndex}>{line}</p>
-          ))}
+      {props.history.map((args, index) => (
+        <div key={index} style={{ marginBottom: '10px' }}>
+          {props.verbose ? (
+            <div>
+              <div>{"Command: " + args[0]}</div>
+              <div>
+                <REPLOutput verbose={props.verbose} output={args[1]} />
+              </div>
+            </div>
+          ) : (
+            <div>
+              <REPLOutput verbose={props.verbose} output={args[1]} />
+            </div>
+          )}
         </div>
       ))}
     </div>

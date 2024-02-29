@@ -5,8 +5,8 @@ import { REPLFunction } from "./REPLFunctionUtility";
 //import { CSV } from './CSV';
 
 interface REPLInputProps {
-  history: string[];
-  setHistory: Dispatch<SetStateAction<string[]>>;
+  history: any[];
+  setHistory: Dispatch<SetStateAction<any[]>>;
   verbose: boolean;
   setVerbose: Dispatch<SetStateAction<boolean>>;
   filepath: string;
@@ -30,7 +30,7 @@ export function REPLInput(props: REPLInputProps) {
     const [commandKeyword, ...args] = commandWithArgs;
 
     // Store the output of the command
-    var output: string;
+    var output: string | string[][];
     const command = props.commandRegistry[commandKeyword];
     console.log(command);
     if (command === undefined) {
@@ -43,15 +43,8 @@ export function REPLInput(props: REPLInputProps) {
       }
     }
 
-    if (props.verbose === false) {
-      // Since props.setVerbose is called after the handle, we want to pass in the opposite
-      props.setHistory([...props.history, output]);
-    } else {
-      props.setHistory([
-        ...props.history,
-        "Command: " + commandString + "\n" + "Output: " + output,
-      ]);
-    }
+    props.setHistory([...props.history, [commandString, output]]);
+
     setCommandString("");
   }
 

@@ -14,7 +14,7 @@ interface REPLFunctionUtilityProps {
 }
 
 export interface REPLFunction {
-  (args: string[] | undefined): string;
+  (args?: string[]): string | string[][];
 }
 
 export function createCommandRegistry(props: REPLFunctionUtilityProps) {

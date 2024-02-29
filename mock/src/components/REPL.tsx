@@ -16,17 +16,20 @@ import { createMockData } from "./REPLMockData";
 */
 
 export default function REPL() {
-  const [history, setHistory] = useState<string[]>([]);
+  const [history, setHistory] = useState<any[]>([]);
   const [verbose, setVerbose] = useState<boolean>(false);
   const [filepath, setFilepath] = useState<string>("");
-  const [mockData, setMockData] = useState<
-    Record<string, Array<any>>
+  const [mockViewData, setMockViewData] = useState<
+    Record<string, string[][]>
+  >({});
+  const [mockSearchData, setMockSearchData] = useState<
+    Record<string, string[][]>
   >({});
   const [commandRegistry, setCommandRegistry] = useState<
     Record<string, REPLFunction>
   >({});
 
-  createMockData({ setMockData });
+  createMockData({ setMockViewData, setMockSearchData });
   createCommandRegistry({ commandRegistry, setCommandRegistry });
   REPLFunctions({
     history,
@@ -35,7 +38,8 @@ export default function REPL() {
     setVerbose,
     filepath,
     setFilepath,
-    mockData,
+    mockViewData,
+    mockSearchData,
     commandRegistry,
     setCommandRegistry,
   });
@@ -45,7 +49,7 @@ export default function REPL() {
       {/*This is where your REPLHistory might go... You also may choose to add it within your REPLInput 
       component or somewhere else depending on your component organization. What are the pros and cons of each? */}
       {/* TODO: Update your REPLHistory and REPLInput to take in new shared state as props */}
-      <REPLHistory history={history} verbose={verbose} filepath="filepath" />
+      <REPLHistory history={history} verbose={verbose} />
       <hr></hr>
       <REPLInput
         history={history}

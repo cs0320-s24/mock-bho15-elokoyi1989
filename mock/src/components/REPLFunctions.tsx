@@ -8,7 +8,8 @@ interface REPLFunctionsProps {
   verbose: boolean;
   setVerbose: Dispatch<SetStateAction<boolean>>;
   filepath: string;
-  mockData: Record<string, Array<any>> | undefined;
+  mockViewData: Record<string, string[][]>;
+  mockSearchData: Record<string, string[][]>;
   setFilepath: Dispatch<SetStateAction<string>>;
   commandRegistry: Record<string, REPLFunction>;
   setCommandRegistry: Dispatch<SetStateAction<Record<string, REPLFunction>>>;
@@ -29,23 +30,34 @@ export function REPLFunctions(props: REPLFunctionsProps) {
       } else if (filepath.length > 1) {
         return "Only one filepath can be taken in.";
       }
-      props.setFilepath(filepath[0]);
-      if ((filepath[0] = "MockData1")) {
+      const csv = props.mockViewData[filepath[0]];
+      console.log(props.mockViewData);
+      if (csv) {
+        props.setFilepath(filepath[0]);
+      } else {
+        return "Filepath does not exist in the data folder."
       }
-      return "This csv file:" + filepath[0] + "is now loaded.";
+      return "This csv file: " + filepath[0] + " is now loaded.";
+    };
+
+    const viewCommand: REPLFunction = () => {
+      if (props.filepath === undefined) {
+        return "Data was not loaded before view.";
+      }
+      return props.mockViewData[props.filepath];
     };
 
     const searchCommand: REPLFunction = (args: string[] | undefined) => {
-      if (!args || args.length < 2) {
-        return "Please provide both column and value for the search.";
+      if (!args || args.length === 2) {
+        return "Please provide a column and value for the search.";
       }
       const [column, value] = args;
-      if (!column || !value) {
-        return "Please provide both column and value for the search.";
+      const result = props.mockSearchData[props.filepath + " " + column + " " + value];
+      if (!result) {
+        return "Search command was well-formed but data was not mocked.";
       }
 
-      // TODO: Perform the search based on the provided column and value
-      return "Search command was well-formed but data was not mocked.";
+      return result;
     };
 
     // Add more commands here!
@@ -56,8 +68,11 @@ export function REPLFunctions(props: REPLFunctionsProps) {
       addCommand("load_file", loadCommand, props.commandRegistry)
     );
     props.setCommandRegistry(
+      addCommand("view", viewCommand, props.commandRegistry)
+    );
+    props.setCommandRegistry(
       addCommand("search", searchCommand, props.commandRegistry)
     );
-  }, [props.verbose]);
+  }, [props.verbose, props.history, props.filepath, props.mockViewData, props.mockSearchData]);
   return null;
 }
