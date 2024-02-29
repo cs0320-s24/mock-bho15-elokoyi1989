@@ -4,6 +4,7 @@ import { REPLHistory } from "./REPLHistory";
 import { REPLInput } from "./REPLInput";
 import { REPLFunction, createCommandRegistry } from "./REPLFunctionUtility";
 import { REPLFunctions } from "./REPLFunctions";
+import { createMockData } from "./REPLMockData";
 
 /* 
   You'll want to expand this component (and others) for the sprints! Remember 
@@ -18,13 +19,14 @@ export default function REPL() {
   const [history, setHistory] = useState<string[]>([]);
   const [verbose, setVerbose] = useState<boolean>(false);
   const [filepath, setFilepath] = useState<string>("");
-  const [MockData, setMockData] = useState<
-    Record<string, string[][]> | undefined
+  const [mockData, setMockData] = useState<
+    Record<string, Array<any>>
   >({});
   const [commandRegistry, setCommandRegistry] = useState<
     Record<string, REPLFunction>
   >({});
 
+  createMockData({ setMockData });
   createCommandRegistry({ commandRegistry, setCommandRegistry });
   REPLFunctions({
     history,
@@ -33,7 +35,7 @@ export default function REPL() {
     setVerbose,
     filepath,
     setFilepath,
-    MockData,
+    mockData,
     commandRegistry,
     setCommandRegistry,
   });

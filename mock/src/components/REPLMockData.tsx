@@ -20,3 +20,5 @@ export function createMockData(props: REPLMockDataProps) {
   }, []); // Empty dependency array ensures this effect runs only once
   return null; // Since this component doesn't render anything, return null
 }
+
+// TODO: Add mock data record for search results

@@ -1,7 +1,6 @@
 import "../styles/main.css";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { REPLFunction, addCommand } from "./REPLFunctionUtility";
-//import { CSV } from "./CSV";
 
 interface REPLFunctionsProps {
   history: string[];
@@ -9,8 +8,7 @@ interface REPLFunctionsProps {
   verbose: boolean;
   setVerbose: Dispatch<SetStateAction<boolean>>;
   filepath: string;
-  // MockData?: Record<string, string[][]>;
-  MockData?: Record<string, string[][]> | undefined;
+  mockData: Record<string, Array<any>> | undefined;
   setFilepath: Dispatch<SetStateAction<string>>;
   commandRegistry: Record<string, REPLFunction>;
   setCommandRegistry: Dispatch<SetStateAction<Record<string, REPLFunction>>>;
@@ -41,41 +39,13 @@ export function REPLFunctions(props: REPLFunctionsProps) {
       if (!args || args.length < 2) {
         return "Please provide both column and value for the search.";
       }
-
       const [column, value] = args;
-
       if (!column || !value) {
         return "Please provide both column and value for the search.";
       }
 
-      // Perform the search based on the provided column and value
-      const searchData = performSearch(column, value);
-
-      return searchData.map((row: any[]) => row.join(", ")).join("\n");
-    };
-
-    const performSearch = (column: string, value: string) => {
-      const data = props.MockData ? props.MockData.StudentData : [];
-
-      if (data.length === 0) {
-        return "No data loaded. Please use the 'load_file' command first.";
-      }
-
-      const header = data[0];
-      const columnIndex = isNaN(parseInt(column))
-        ? header.indexOf(column)
-        : parseInt(column);
-      // chcekcing to see if push is working
-
-      if (columnIndex === -1) {
-        return `Column '${column}' not found.`;
-      }
-
-      const searchData = data.filter(
-        (row, index) => index !== 0 && row[columnIndex] === value
-      );
-
-      return searchData;
+      // TODO: Perform the search based on the provided column and value
+      return "Search command was well-formed but data was not mocked.";
     };
 
     // Add more commands here!

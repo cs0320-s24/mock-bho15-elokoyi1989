@@ -52,7 +52,6 @@ export function REPLInput(props: REPLInputProps) {
         "Command: " + commandString + "\n" + "Output: " + output,
       ]);
     }
-
     setCommandString("");
   }
 
