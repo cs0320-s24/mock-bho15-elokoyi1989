@@ -20,7 +20,6 @@ export function REPLFunctions(props: REPLFunctionsProps) {
     // Create more commands here!
     const modeCommand: REPLFunction = () => {
       props.setVerbose(!props.verbose);
-      console.log(props.verbose);
       return "Verbose is now " + !props.verbose;
     };
 
@@ -31,7 +30,6 @@ export function REPLFunctions(props: REPLFunctionsProps) {
         return "Only one filepath can be taken in.";
       }
       const csv = props.mockViewData[filepath[0]];
-      console.log(props.mockViewData);
       if (csv) {
         props.setFilepath(filepath[0]);
       } else {
@@ -48,7 +46,7 @@ export function REPLFunctions(props: REPLFunctionsProps) {
     };
 
     const searchCommand: REPLFunction = (args: string[] | undefined) => {
-      if (!args || args.length === 2) {
+      if (!args || args.length != 2) {
         return "Please provide a column and value for the search.";
       }
       const [column, value] = args;
