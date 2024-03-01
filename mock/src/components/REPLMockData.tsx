@@ -26,24 +26,20 @@ export function createMockData(props: REPLMockDataProps) {
         ["San Francisco", "37", "-120"],
         ["Denver", "40", "-105"],
         ["Providence", "41.8", "-71.25"],
-        ["Bangkok", "13.75", "100.5"]
-      ]
+        ["Bangkok", "13.75", "100.5"],
+      ],
     };
     // Mock search data is a record from command (in string form) to a string[][]
     const mockSearchData: Record<string, string[][]> = {
-      "student-data.csv major art": [
-        ["Derrick", "Art", "Minden", "22"],
-      ],
+      "student-data.csv major art": [["Derrick", "Art", "Minden", "22"]],
       "student-data.csv 3 20": [
         ["Brian", "Geology", "Greg A", "20"],
         ["Colton", "Urban Studies", "Grad Center", "20"],
       ],
       "coordinates.csv city name providence": [
-        ["Providence", "41.8", "-71.25"]
+        ["Providence", "41.8", "-71.25"],
       ],
-      "coordinates.csv 1 37": [
-        ["San Francisco", "37", "-120"]
-      ]
+      "coordinates.csv 1 37": [["San Francisco", "37", "-120"]],
     };
     props.setMockViewData(mockViewData);
     props.setMockSearchData(mockSearchData);
