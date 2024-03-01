@@ -237,3 +237,144 @@ test("should handle authentication state correctly", async ({ page }) => {
   // Try executing a command without logging in
   await expect(page.getByLabel("repl-command-box")).not.toBeVisible();
 });
+
+test("search command on one column csv", async ({ page }) => {
+  await page.goto("http://localhost:8000/");
+  await page.getByLabel("Login").click();
+
+  // search command for 'ice-cream.csv flavors Vanilla'
+
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file ice-cream.csv");
+  await page.getByLabel("Submit").click();
+
+  await page.getByLabel("Command input").click();
+  await page
+    .getByLabel("Command input")
+    .fill("search ice-cream.csv flavors Vanilla");
+  await page.getByLabel("Submit").click();
+
+  // Verify that the data matches the mock search data
+  const expectedSearchData = [["Vanilla"]];
+
+  for (const row of expectedSearchData) {
+    for (const cell of row) {
+      await expect(page.getByText(cell)).toBeVisible;
+    }
+  }
+});
+
+test("load and viewing multiple times works", async ({ page }) => {
+  await page.goto("http://localhost:8000/");
+  await page.getByLabel("Login").click();
+
+  //  view command for 'student-data.csv'
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file students-data.csv");
+  await page.getByLabel("Submit").click();
+  await page.getByLabel("Command input").fill("view");
+  await page.getByLabel("Submit").click();
+
+  // Verify that the displayed data matches the mock data for 'student-data.csv'
+  const expectedViewData = [
+    ["Student", "Major", "Dorm", "Age"],
+    ["Ashley", "Mathematics", "New Pem 3", "21"],
+    ["Brian", "Geology", "Greg A", "20"],
+    ["Colton", "Urban Studies", "Grad Center", "20"],
+    ["Derrick", "Art", "Minden", "22"],
+    ["Emily", "English", "Metcalf", "19"],
+  ];
+
+  for (const row of expectedViewData) {
+    for (const cell of row) {
+      await expect(page.getByText(cell)).toBeVisible;
+    }
+  }
+
+  //  view command for 'student-data.csv'
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file coordinates.csv");
+  await page.getByLabel("Submit").click();
+  await page.getByLabel("Command input").fill("view");
+  await page.getByLabel("Submit").click();
+
+  // Verify that the displayed data matches the mock data for 'student-data.csv'
+  const expectedViewData2 = [
+    ["City Name", "Lat", "Long"],
+    ["San Francisco", "37", "-120"],
+    ["Denver", "40", "-105"],
+    ["Providence", "41.8", "-71.25"],
+    ["Bangkok", "13.75", "100.5"],
+  ];
+
+  for (const row of expectedViewData2) {
+    for (const cell of row) {
+      await expect(page.getByText(cell)).toBeVisible;
+    }
+  }
+});
+
+test("search command when there is no result", async ({ page }) => {
+  await page.goto("http://localhost:8000/");
+  await page.getByLabel("Login").click();
+
+  // search command for 'student-data.csv major art'
+
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("load_file coordinates.csv");
+  await page.getByLabel("Submit").click();
+
+  await page.getByLabel("Command input").click();
+  await page
+    .getByLabel("Command input")
+    .fill("search coordinates.csv city name Jamaica city");
+  await page.getByLabel("Submit").click();
+
+  // Verify that the data matches the mock search data
+  const expectedSearchData = [[]];
+
+  for (const row of expectedSearchData) {
+    for (const cell of row) {
+      await expect(page.getByText(cell)).toBeVisible;
+    }
+  }
+});
+
+test("after I change the mode, all the commands change too", async ({
+  page,
+}) => {
+  // Navigate to page
+  await page.goto("http://localhost:8000/");
+  await page.getByLabel("Login").click();
+
+  // Enter invalid command
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("invalid command");
+  await page.getByLabel("Submit").click();
+
+  await expect(page.getByText("Command was not found.")).toBeVisible;
+
+  //changing to verbose mode
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("mode");
+  await page.getByLabel("Submit").click();
+
+  // Check if the verbose state is correctly shown
+  await expect(page.getByText("Verbose is now true")).toBeVisible;
+
+  await expect(
+    page.getByText(
+      "Command: invalid command Output: Command was not found. Command: mode Output: Verbose is now true"
+    )
+  ).toBeVisible;
+
+  await page.getByLabel("Command input").click();
+  await page.getByLabel("Command input").fill("mode");
+  await page.getByLabel("Submit").click();
+
+  await expect(
+    page.getByText(
+      "Command was not found. Verbose is now true Verbose is now false"
+    )
+  ).toBeVisible;
+});
