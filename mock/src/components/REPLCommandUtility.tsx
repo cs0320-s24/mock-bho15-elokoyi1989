@@ -1,23 +1,25 @@
-// trying s omething or pushing's sake
 import { Dispatch, SetStateAction, useEffect } from "react";
 
-/**
- * A command-processor function for our REPL. The function returns a string, which is the value to print to history when
- * the command is done executing.
- *
- * The arguments passed in the input (which need not be named "args") should
- * *NOT* contain the command-name prefix.
- */
-interface REPLFunctionUtilityProps {
+/*
+  This class has the functions to create the command registry and add functions to it.
+*/
+
+interface REPLCommandUtilityProps {
   commandRegistry: Record<string, REPLFunction>;
   setCommandRegistry: Dispatch<SetStateAction<Record<string, REPLFunction>>>;
 }
 
+/*
+  An interface that any function that can be added to the command registry must implement.
+*/
 export interface REPLFunction {
   (args?: string[]): string | string[][];
 }
 
-export function createCommandRegistry(props: REPLFunctionUtilityProps) {
+/*
+  This function runs once, and creates the command registry.
+*/
+export function createCommandRegistry(props: REPLCommandUtilityProps) {
   useEffect(() => {
     const commandRegistry: Record<string, REPLFunction> = {};
     props.setCommandRegistry(commandRegistry);
@@ -25,6 +27,9 @@ export function createCommandRegistry(props: REPLFunctionUtilityProps) {
   return null; // Since this component doesn't render anything, return null
 }
 
+/*
+  This function adds a command to the command registry
+*/
 export function addCommand(
   commandName: string,
   command: REPLFunction,

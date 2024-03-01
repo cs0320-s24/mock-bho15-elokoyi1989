@@ -1,11 +1,18 @@
 import "../styles/main.css";
 import { REPLOutput } from "./REPLOutput";
 
+/*
+  This class keeps track of the command and output history.
+*/
+
 interface REPLHistoryProps {
   verbose: boolean;
-  history: string[];
+  history: any[];
 }
 
+/*
+  Returns HTML elements based on the return type of the command.
+*/
 export function REPLHistory(props: REPLHistoryProps) {
   return (
     <div className="repl-history">

@@ -1,8 +1,7 @@
 import "../styles/main.css";
 import { Dispatch, SetStateAction, useState } from "react";
 import { ControlledInput } from "./ControlledInput";
-import { REPLFunction } from "./REPLFunctionUtility";
-//import { CSV } from './CSV';
+import { REPLFunction } from "./REPLCommandUtility";
 
 interface REPLInputProps {
   history: any[];
@@ -16,7 +15,6 @@ interface REPLInputProps {
 // You can use a custom interface or explicit fields or both! An alternative to the current function header might be:
 // REPLInput(history: string[], setHistory: Dispatch<SetStateAction<string[]>>)
 export function REPLInput(props: REPLInputProps) {
-  // Remember: let React manage state in your webapp.
   // Manages the contents of the input box
   const [commandString, setCommandString] = useState<string>("");
   const [count, setCount] = useState<number>(0);
@@ -43,8 +41,10 @@ export function REPLInput(props: REPLInputProps) {
       }
     }
 
+    // Appends a list of the command string and the output to the history
     props.setHistory([...props.history, [commandString, output]]);
 
+    // Resets the command string
     setCommandString("");
   }
 

@@ -2,36 +2,38 @@ import { useState } from "react";
 import "../styles/main.css";
 import { REPLHistory } from "./REPLHistory";
 import { REPLInput } from "./REPLInput";
-import { REPLFunction, createCommandRegistry } from "./REPLFunctionUtility";
-import { REPLFunctions } from "./REPLFunctions";
+import { REPLFunction, createCommandRegistry } from "./REPLCommandUtility";
+import { REPLCommands } from "./REPLCommands";
 import { createMockData } from "./REPLMockData";
 
 /* 
-  You'll want to expand this component (and others) for the sprints! Remember 
-  that you can pass "props" as function arguments. If you need to handle state 
-  at a higher level, just move up the hooks and pass the state/setter as a prop.
-  
-  This is a great top level component for the REPL. It's a good idea to have organize all components in a component folder.
-  You don't need to do that for this gearup.
+  Top level component for the REPL, sets up most states that run through the rest of the program.
 */
 
 export default function REPL() {
   const [history, setHistory] = useState<any[]>([]);
+  // Verbose tracks the display mode
   const [verbose, setVerbose] = useState<boolean>(false);
+  // Filepath tracks the filepath currently loaded
   const [filepath, setFilepath] = useState<string>("");
+  // Mock data records for view and search commands
   const [mockViewData, setMockViewData] = useState<
     Record<string, string[][]>
   >({});
   const [mockSearchData, setMockSearchData] = useState<
     Record<string, string[][]>
   >({});
+  // Command registry tracks the commands loaded into the program
   const [commandRegistry, setCommandRegistry] = useState<
     Record<string, REPLFunction>
   >({});
 
+  // Helper functions to fill the mock data
   createMockData({ setMockViewData, setMockSearchData });
+  // Creates the command registry to fill in
   createCommandRegistry({ commandRegistry, setCommandRegistry });
-  REPLFunctions({
+  // Fills the registry with desired commands
+  REPLCommands({
     history,
     setHistory,
     verbose,
@@ -46,9 +48,6 @@ export default function REPL() {
 
   return (
     <div className="repl">
-      {/*This is where your REPLHistory might go... You also may choose to add it within your REPLInput 
-      component or somewhere else depending on your component organization. What are the pros and cons of each? */}
-      {/* TODO: Update your REPLHistory and REPLInput to take in new shared state as props */}
       <REPLHistory history={history} verbose={verbose} />
       <hr></hr>
       <REPLInput

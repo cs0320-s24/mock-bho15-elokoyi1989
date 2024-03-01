@@ -3,6 +3,10 @@ interface REPLOutputProps {
   output: string | string[][];
 }
 
+/*
+  This class creates separate HTML elements based on the output of the command as well as the verbose state.
+*/
+
 export function REPLOutput(props: REPLOutputProps) {
   if (typeof props.output === "string") {
     return (

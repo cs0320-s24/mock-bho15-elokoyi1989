@@ -1,8 +1,15 @@
 import "../styles/main.css";
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { REPLFunction, addCommand } from "./REPLFunctionUtility";
+import { REPLFunction, addCommand } from "./REPLCommandUtility";
 
-interface REPLFunctionsProps {
+/* 
+  This class keeps track of all the commands that can be used in the REPL program.
+*/
+
+/*
+  It takes in all of the necessary states that commands can change and read.
+*/
+interface REPLCommandsProps {
   history: string[];
   setHistory: Dispatch<SetStateAction<string[]>>;
   verbose: boolean;
@@ -15,9 +22,12 @@ interface REPLFunctionsProps {
   setCommandRegistry: Dispatch<SetStateAction<Record<string, REPLFunction>>>;
 }
 
-export function REPLFunctions(props: REPLFunctionsProps) {
+/*
+  Commands are created and added here.
+*/
+export function REPLCommands(props: REPLCommandsProps) {
   useEffect(() => {
-    // Create more commands here!
+    // Create commands here!
     const modeCommand: REPLFunction = () => {
       props.setVerbose(!props.verbose);
       return "Verbose is now " + !props.verbose;
@@ -58,7 +68,7 @@ export function REPLFunctions(props: REPLFunctionsProps) {
       return result;
     };
 
-    // Add more commands here!
+    // Add commands here!
     props.setCommandRegistry(
       addCommand("mode", modeCommand, props.commandRegistry)
     );

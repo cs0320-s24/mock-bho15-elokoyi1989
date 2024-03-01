@@ -1,5 +1,9 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
 
+/*
+  This class creates mock data for both the view and search commands.
+*/
+
 interface REPLMockDataProps {
   setMockViewData: Dispatch<SetStateAction<Record<string, string[][]>>>;
   setMockSearchData: Dispatch<SetStateAction<Record<string, string[][]>>>;
@@ -7,6 +11,7 @@ interface REPLMockDataProps {
 
 export function createMockData(props: REPLMockDataProps) {
   useEffect(() => {
+    // Mock view data is a record from filename to a string[][]
     const mockViewData: Record<string, string[][]> = {
       "student-data.csv": [
         ["Student", "Major", "Dorm", "Age"],
@@ -24,6 +29,7 @@ export function createMockData(props: REPLMockDataProps) {
         ["Bangkok", "13.75", "100.5"]
       ]
     };
+    // Mock search data is a record from command (in string form) to a string[][]
     const mockSearchData: Record<string, string[][]> = {
       "student-data.csv major art": [
         ["Derrick", "Art", "Minden", "22"],
