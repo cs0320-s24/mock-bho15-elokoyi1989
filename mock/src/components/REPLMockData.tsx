@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
 
-/*
+/**
   This class creates mock data for both the view and search commands.
 */
 
@@ -9,6 +9,11 @@ interface REPLMockDataProps {
   setMockSearchData: Dispatch<SetStateAction<Record<string, string[][]>>>;
 }
 
+/**
+ * Creates the mock data for our frontend.
+ * @param props the modifiers for our mockViewData and mockSearchData
+ * @returns nothing
+ */
 export function createMockData(props: REPLMockDataProps) {
   useEffect(() => {
     // Mock view data is a record from filename to a string[][]

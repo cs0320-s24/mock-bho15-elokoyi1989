@@ -2,11 +2,11 @@ import "../styles/main.css";
 import { Dispatch, SetStateAction, useEffect } from "react";
 import { REPLFunction, addCommand } from "./REPLCommandUtility";
 
-/* 
+/** 
   This class keeps track of all the commands that can be used in the REPL program.
 */
 
-/*
+/**
   It takes in all of the necessary states that commands can change and read.
 */
 interface REPLCommandsProps {
@@ -22,9 +22,11 @@ interface REPLCommandsProps {
   setCommandRegistry: Dispatch<SetStateAction<Record<string, REPLFunction>>>;
 }
 
-/*
-  Commands are created and added here.
-*/
+/**
+ * Commands are created and added here.
+ * @param props aspects of the program that new commands can have access to.
+ * @returns nothing
+ */
 export function REPLCommands(props: REPLCommandsProps) {
   useEffect(() => {
     // Create commands here!

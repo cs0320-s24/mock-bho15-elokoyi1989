@@ -9,9 +9,9 @@ import { expect, test } from "@playwright/test";
  */
 
 // If you needed to do something before every test case...
-test.beforeEach(() => {
-  // ... you'd put it here.
-  // TODO: Is there something we need to do before every test case to avoid repeating code?
+test.beforeEach(async({ page }) => {
+  // Go to the local host URL
+  await page.goto("http://localhost:8000/");
 });
 
 /**
@@ -21,9 +21,8 @@ test.beforeEach(() => {
  * like any interaction with the page.
  */
 
+// Test: Check that assets are not visible before logging in
 test("on page load, check initial state", async ({ page }) => {
-  await page.goto("http://localhost:8000/");
-
   // Ensure other elements are not visible initially
   await expect(page.getByLabel("Sign Out")).not.toBeVisible();
   await expect(page.getByLabel("Command input")).not.toBeVisible();
@@ -31,14 +30,9 @@ test("on page load, check initial state", async ({ page }) => {
 });
 
 // Test: Check behavior of the input box after submitting a command
-test("after submitting a command, verify input box behavior", async ({
-  page,
-}) => {
-  await page.goto("http://localhost:8000/");
-
+test("after submitting a command, verify input box behavior", async ({page}) => {
   // Click Login button
   await page.getByLabel("Login").click();
-  2;
   // Type a command in the input box
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("Test Command");
@@ -50,15 +44,14 @@ test("after submitting a command, verify input box behavior", async ({
   await expect(page.getByLabel("Command input")).toHaveValue("");
 });
 
+// Test: verify that the login button is visible on page load
 test("on page load, i see a login button", async ({ page }) => {
   // Notice: http, not https! Our front-end is not set up for HTTPs.
-  await page.goto("http://localhost:8000/");
   await expect(page.getByLabel("Login")).toBeVisible();
 });
 
+// Test: verify that the input box is not visible until log in
 test("on page load, i dont see the input box until login", async ({ page }) => {
-  // Notice: http, not https! Our front-end is not set up for HTTPs.
-  await page.goto("http://localhost:8000/");
   await expect(page.getByLabel("Sign Out")).not.toBeVisible();
   await expect(page.getByLabel("Command input")).not.toBeVisible();
 
@@ -68,9 +61,8 @@ test("on page load, i dont see the input box until login", async ({ page }) => {
   await expect(page.getByLabel("Command input")).toBeVisible();
 });
 
+// Test: verify that text changes with input
 test("after I type into the input box, its text changes", async ({ page }) => {
-  // Step 1: Navigate to a URL
-  await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
 
   // Step 2: Interact with the page
@@ -84,14 +76,14 @@ test("after I type into the input box, its text changes", async ({ page }) => {
   await expect(page.getByLabel("Command input")).toHaveValue(mock_input);
 });
 
+// Test: verify that button is apparent after page load
 test("on page load, i see a button", async ({ page }) => {
-  await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
   await expect(page.getByLabel("Submit")).toBeVisible();
 });
 
+// Test: label increments with each click
 test("after I click the button, its label increments", async ({ page }) => {
-  await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
   await page.getByLabel("Submit").click();
   await expect(page.getByLabel("Submit")).toHaveText("Submitted 1 times");
@@ -101,8 +93,8 @@ test("after I click the button, its label increments", async ({ page }) => {
   await expect(page.getByLabel("Submit")).toHaveText("Submitted 3 times");
 });
 
+// Test: command is not found is returned with bogus command
 test("after I click the button, my command gets pushed", async ({ page }) => {
-  await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("hiii");
@@ -110,9 +102,9 @@ test("after I click the button, my command gets pushed", async ({ page }) => {
   await expect(page.getByText("Command was not found.")).toBeVisible();
 });
 
+// Test: verbose output occurs when mode command is used
 test("after I change the mode, it changes to verbose", async ({ page }) => {
   // Navigate to page
-  await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
 
   // Enter verbose mode by passing in "mode" command
@@ -124,8 +116,8 @@ test("after I change the mode, it changes to verbose", async ({ page }) => {
   await expect(page.getByText("Verbose is now true")).toBeVisible;
 });
 
+// Test: view command works
 test("view command shows correct data", async ({ page }) => {
-  await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
 
   //  view command for 'student-data.csv'
@@ -152,12 +144,11 @@ test("view command shows correct data", async ({ page }) => {
   }
 });
 
+// Test: example search command
 test("search command displays correct data", async ({ page }) => {
-  await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
 
   // search command for 'student-data.csv major art'
-
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill("load_file students-data.csv");
   await page.getByLabel("Submit").click();
@@ -165,7 +156,7 @@ test("search command displays correct data", async ({ page }) => {
   await page.getByLabel("Command input").click();
   await page
     .getByLabel("Command input")
-    .fill("search student-data.csv major art");
+    .fill("search major art");
   await page.getByLabel("Submit").click();
 
   // Verify that the data matches the mock search data
@@ -178,8 +169,8 @@ test("search command displays correct data", async ({ page }) => {
   }
 });
 
+// Test: missing filepath on load command
 test("handles missing filepath argument in load command", async ({ page }) => {
-  await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
 
   // Execute load_file command without providing a filepath
@@ -193,8 +184,8 @@ test("handles missing filepath argument in load command", async ({ page }) => {
   ).toBeVisible();
 });
 
+// Test: multiple filepaths yield an error as well
 test("handles multiple arguments in load command", async ({ page }) => {
-  await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
 
   // Execute load_file command with more than one argument
@@ -208,8 +199,8 @@ test("handles multiple arguments in load command", async ({ page }) => {
   ).toBeVisible();
 });
 
+// Test: nonexistent filepath on load
 test("handles nonexistent filepath in load command", async ({ page }) => {
-  await page.goto("http://localhost:8000/");
   await page.getByLabel("Login").click();
 
   // Execute load_file command with a nonexistent filepath
@@ -226,12 +217,10 @@ test("handles nonexistent filepath in load command", async ({ page }) => {
   ).toBeVisible();
 });
 
+// Test: loading correct filepath
 test("should load a file using load_file command", async ({ page }) => {
-  // Navigate to the application
-  await page.goto("http://localhost:8000/");
-
   await page.getByLabel("Login").click();
-
+  
   // Execute the load_file command to load a file
   await page.getByLabel("Command input").click();
   await page.getByLabel("Command input").fill(`load_file student-data.csv`);
@@ -243,10 +232,8 @@ test("should load a file using load_file command", async ({ page }) => {
   ).toBeVisible();
 });
 
+// Test: repl command box not visible if not logged in
 test("should handle authentication state correctly", async ({ page }) => {
-  // Navigate to the application
-  await page.goto("http://localhost:8000/");
-
   // Try executing a command without logging in
   await expect(page.getByLabel("repl-command-box")).not.toBeVisible();
 });

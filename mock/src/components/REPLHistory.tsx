@@ -10,9 +10,11 @@ interface REPLHistoryProps {
   history: any[];
 }
 
-/*
-  Returns HTML elements based on the return type of the command.
-*/
+/**
+ * Return HTML components for different types of returns.
+ * @param props 
+ * @returns nothing
+ */
 export function REPLHistory(props: REPLHistoryProps) {
   return (
     <div className="repl-history">

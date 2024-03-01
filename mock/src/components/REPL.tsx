@@ -6,10 +6,9 @@ import { REPLFunction, createCommandRegistry } from "./REPLCommandUtility";
 import { REPLCommands } from "./REPLCommands";
 import { createMockData } from "./REPLMockData";
 
-/* 
+/**
   Top level component for the REPL, sets up most states that run through the rest of the program.
 */
-
 export default function REPL() {
   const [history, setHistory] = useState<any[]>([]);
   // Verbose tracks the display mode

@@ -7,6 +7,11 @@ interface REPLOutputProps {
   This class creates separate HTML elements based on the output of the command as well as the verbose state.
 */
 
+/**
+ * This function returns HTML components for outputs of commands
+ * @param props verbose and the output
+ * @returns HTML components
+ */
 export function REPLOutput(props: REPLOutputProps) {
   if (typeof props.output === "string") {
     return (
