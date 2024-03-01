@@ -189,7 +189,7 @@ test("handles missing filepath argument in load command", async ({ page }) => {
 
   // Assert that the error message is displayed
   await expect(
-    page.getByText("Filepath was not given as an argument.")
+    page.getByText("Filepath does not exist in the data folder.")
   ).toBeVisible();
 });
 
