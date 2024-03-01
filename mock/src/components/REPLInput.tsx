@@ -24,7 +24,7 @@ export function REPLInput(props: REPLInputProps) {
     setCount(count + 1);
 
     // Split up input string into command and arguments
-    var commandWithArgs = commandString.split(" ");
+    var commandWithArgs = commandString.toLowerCase().split(" ");
     const [commandKeyword, ...args] = commandWithArgs;
 
     // Store the output of the command
@@ -34,11 +34,7 @@ export function REPLInput(props: REPLInputProps) {
     if (command === undefined) {
       output = "Command was not found.";
     } else {
-      if (commandKeyword.toLowerCase() === "search") {
-        output = command(commandWithArgs.slice(1)); // Pass all arguments to the search command
-      } else {
-        output = command(args);
-      }
+      output = command(args);
     }
 
     // Appends a list of the command string and the output to the history
